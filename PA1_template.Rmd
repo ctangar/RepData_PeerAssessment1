@@ -13,8 +13,6 @@ PA_template.Rmd  html_document
 This is an R Markdown document. It contains the completed work for peer assignment #1 for the Coursera Reproducable Research class.
 
 
-
-
 # Loading & Preprocessing Data
 
 ________
@@ -61,16 +59,13 @@ ass1Data$date <- as.Date(ass1Data$date)
 ass1DataIgnoreNa <- na.omit(ass1Data)
 ```
 
-
 sum steps by date
 
 ```{r}
 dailySteps <-aggregate(formula = steps~date, data = ass1Data, FUN = sum, na.rm=TRUE)
-
-
 ```
 
-
+Plot histogram
 
 ```{r}
 hist(dailySteps$steps, main=" ", breaks=10,xlab="Number of Steps Daily") 
@@ -190,14 +185,10 @@ main=" ",
 breaks=10,
 xlab="Total Number of Steps Taken Daily After Imputation")
 
-
-
 # Summarize the data by day
 dailyImpActivity <-
   aggregate(formula = steps~date, data = imputedActivity,
             FUN = sum, na.rm=TRUE)
-
-
 
 
 ```
@@ -213,6 +204,8 @@ meanImpSteps <- round(mean(dailyImpActivity$steps), 2)
 meanImpSteps
 medianImpSteps <- round(median(dailyImpActivity$steps),2)
 medianImpSteps
+
+# Plot histogram imput values
 
 hist(dailyImpActivity$steps,
 main=" ",
@@ -246,12 +239,6 @@ imputedActivity$weekPart <- factor(
 # Plot the average steps per interval, given the week_part
 stepsInterval %+% imputedActivity + facet_grid(weekPart~.)
 
-
-
-
-
-
-
 # Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 # 
 
@@ -259,17 +246,20 @@ stepsInterval %+% imputedActivity + facet_grid(weekPart~.)
 
 
 
+Final report:
 
-Comment: README file in the GitHub repository show an example of what this plot should look like using simulated data.
-
-
-
+Are there differences in activity patterns between weekdays and weekends? Yes. The plot indicates that the person moves around more (or more active) during the weekend days.
 
 
+Conclusion
+
+In this assignment, it provided a  approach for analyzing data. The data analysis started from loading data, transform data including the strategy and implementation of dealing with missing data, and reporting statistical data and plots. The reader should be able to follow the document and reproduce the same results. 
+
+The document was prepared with R Studio Version 0.98.1073 
 
 ______________
 
-**Note:** the results use sqldf library as alternative to R functions.
+**Note:** tools used: R, R-studio, GitHub, Knitr, y RMarkdown.
 
 ____________
 
