@@ -1,5 +1,3 @@
-## General information   
-
 
 ---
 title: "Reproducible Research: Peer Assessment 1"
@@ -8,31 +6,29 @@ date: "Sunday, April 19, 2015"
 ---
 
 
-## Files & format
 
 
----------------------------------
-file             Output          
----------------  ----------------
-PA_template.Rmd  html_document   
----------------------------------
+
+# General information  
+
+
+|       File      |     Output    |
+|:---------------:|:-------------:|
+| PA_template.Rmd | html_document |
 
 
 ## Assesment description
 
 This is an R Markdown document. It contains the completed work for peer assignment #1 for the Coursera Reproducable Research class.
 
-
-## Loading & Preprocessing Data
-
-________
-
-I will download the dataset required for this assignment. 
-
 ## Dataset description.
 
 This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
 
+
+# Loading & Preprocessing Data
+
+I will download the dataset required for this assignment. 
 
 First show Code that is needed to:
 
@@ -83,7 +79,7 @@ hist(dailySteps$steps, main=" ", breaks=10,xlab="Number of Steps Daily")
 
 I continue with the analysis as requested.
 
-##What is mean total number of steps taken per day?
+# What is mean total number of steps taken per day?
 
 
 Report mean and median of the total number of steps taken per day:
@@ -94,7 +90,7 @@ round(mean(dailySteps$steps))
 median(dailySteps$steps)
 ```
 
-##What is the average daily activity pattern?
+# What is the average daily activity pattern?
 
 Calculate the average steps an make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
@@ -142,7 +138,7 @@ Result:
 The person's daily activity interval around 8:35 am contains the maximun number of steps.
 
 
-##Imputing missing values
+# Imputing missing values
 
 In this section:
 
@@ -232,7 +228,7 @@ Comments:
 
 
 
-## Differences in activity patterns between weekdays and weekends?
+# Differences in activity patterns between weekdays and weekends?
 
 * Use the dataset with the filled-in missing values for this part. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 * Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
@@ -260,7 +256,7 @@ Final report:
 Are there differences in activity patterns between weekdays and weekends? Yes. The plot indicates that the person moves around more (or more active) during the weekend days.
 
 
-Conclusion
+# Conclusion
 
 In this assignment, it provided a  approach for analyzing data. The data analysis started from loading data, transform data including the strategy and implementation of dealing with missing data, and reporting statistical data and plots. The reader should be able to follow the document and reproduce the same results. 
 
@@ -268,7 +264,7 @@ The document was prepared with R Studio Version 0.98.1073
 
 ______________
 
-**Note:** tools used: R, R-studio, GitHub, Knitr, y RMarkdown.
+**Note:** tools used: R, R-studio, GitHub, Knitr, and RMarkdown.
 
 ____________
 
