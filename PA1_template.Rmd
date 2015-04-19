@@ -1,4 +1,5 @@
-## General information
+## General information   
+
 
 ---
 title: "Reproducible Research: Peer Assessment 1"
@@ -6,7 +7,9 @@ author: "Carlos Tangarife"
 date: "Sunday, April 19, 2015"
 ---
 
-Files & format
+
+## Files & format
+
 
 ---------------------------------
 file             Output          
@@ -14,7 +17,8 @@ file             Output
 PA_template.Rmd  html_document   
 ---------------------------------
 
-## assesment description
+
+## Assesment description
 
 This is an R Markdown document. It contains the completed work for peer assignment #1 for the Coursera Reproducable Research class.
 
