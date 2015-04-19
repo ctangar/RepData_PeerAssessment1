@@ -1,25 +1,276 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+author: "Carlos Tangarife"
+date: "Sunday, April 19, 2015"
 ---
 
+----------------------------------
+file             output          
+-------------    ----------------
+PA_template.Rmd  html_document   
+----------------------------------
 
-## Loading and preprocessing the data
-
-
-
-## What is mean total number of steps taken per day?
-
-
-
-## What is the average daily activity pattern?
+This is an R Markdown document. It contains the completed work for peer assignment #1 for the Coursera Reproducable Research class.
 
 
 
-## Imputing missing values
+
+# Loading & Preprocessing Data
+
+________
+
+I will download the dataset required for this assignment. 
+
+## Dataset description.
+
+This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
+
+
+First show Code that is needed to:
+
+1. Load the data 
+2. Process/transform the data
+
+Remove all variables from the Global Environment and load data
+
+```{r}
+# Load the plotting package `ggplot2` by Hadley Wickham.
+# Try to install the package if it is not found.
+if(!suppressMessages(require(ggplot2))){ 
+    print('trying to install ggplot2')
+    install.packages('ggplot2')
+    if(suppressMessagesrequire(ggplot2)){
+        print("ggplot2 installed and loaded")
+    } else {
+        stop("could not install ggplot2")
+    }
+}
+rm(list=ls(all=TRUE)) 
+# suppress warnings
+ass1Data <- read.csv('activity.csv', stringsAsFactors = FALSE)
+#read.csv("activity.csv")
+```
+
+Show head and convert date
+
+```{r}
+head(ass1Data)
+# convert date to date data type
+ass1Data$date <- as.Date(ass1Data$date) 
+#Create a new dataset ignoring missing data NA
+ass1DataIgnoreNa <- na.omit(ass1Data)
+```
+
+
+sum steps by date
+
+```{r}
+dailySteps <-aggregate(formula = steps~date, data = ass1Data, FUN = sum, na.rm=TRUE)
+
+
+```
 
 
 
-## Are there differences in activity patterns between weekdays and weekends?
+```{r}
+hist(dailySteps$steps, main=" ", breaks=10,xlab="Number of Steps Daily") 
+```
+
+I continue with the analysis as requested.
+
+##What is mean total number of steps taken per day?
+
+
+Report mean and median of the total number of steps taken per day:
+
+```{r}
+
+round(mean(dailySteps$steps))
+median(dailySteps$steps)
+```
+
+##What is the average daily activity pattern?
+
+Calculate the average steps an make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
+
+```{r}
+intervalActivity <- aggregate(formula=steps~interval, data=ass1Data, FUN=mean, na.rm=TRUE)
+maxSteps <- intervalActivity[which(intervalActivity$steps==max(intervalActivity$steps)),]
+# Get the data for the interval with the most average activity across the days
+
+
+mean_ci <- function(data)
+{
+    m <- mean(data)
+    data.frame(y=m,
+               ymin = m-(1.96*sd(data)/sqrt(length(data))),
+               ymax = m+(1.96*sd(data)/sqrt(length(data))))
+}
+
+
+# Plot the average number of steps per interval.
+# Use ggplot2 to summarize de data, to
+# find inconsistencies with the analysis.
+# Geom 'line' is equivalent to 'type="l"' in plot.
+stepsInterval <- 
+qplot(x=interval, y=steps,
+      data=subset(ass1Data, complete.cases(ass1Data)),
+      geom='smooth', stat='summary', fun.data=mean_ci) +
+  labs(y='Average steps per interval', x='Interval')
+
+stepsInterval
+
+
+```
+
+Report the 5-min interval, on average across all the days in the dataset, contains the maximum number of steps:
+
+```{r}
+max_steps <- intervalActivity[which(intervalActivity$steps==max(intervalActivity$steps)),]
+max_steps
+#intervalMeanSteps[which.max(intervalMeanSteps$mean), ]
+```
+
+Result:
+
+The person's daily activity interval around 8:35 am contains the maximun number of steps.
+
+
+##Imputing missing values
+
+In this section:
+
+* Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+* Implement a strategy for filling in all of the missing values in the dataset. For this assignment the strategy is to use the mean for that 5-minute interval to replace missing values. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+* Make a histogram of the total number of steps taken each day
+* Calculate and report the mean and median total number of steps taken per day.
+
+
+First Calculate and report the total number of missing values in the dataset.
+
+
+```{r}
+# Count the number of NAs
+totalNAs <- sum(!complete.cases(ass1Data))
+stepNAs <- sum(is.na(ass1Data$steps))
+
+# Calculate the number of missing dates
+datesInRange <- seq.Date(from = min(ass1Data$date),
+                           to = max(ass1Data$date),
+                           by='1 day')
+dateNAs <- sum(!ass1Data$date[complete.cases(ass1Data)] %in% datesInRange)
+
+```
+
+
+Second Implement a strategy for filling in all of the missing values in the dataset.
+
+```{r}
+# Use previously calculated means
+intervalActivity$imputedSteps <- floor(intervalActivity$steps)
+
+# Merge the replacement values
+imputedActivity <- merge(ass1Data,
+                          intervalActivity[,c('interval', 'imputedSteps')],
+                          by='interval')
+
+# Replace the missing values
+imputedActivity$steps <- ifelse(is.na(imputedActivity$steps),
+                                 imputedActivity$imputedSteps,
+                                 imputedActivity$steps)
+
+# Remove unnecesary data
+imputedActivity$imputedSteps <- NULL
+
+
+#Plot histogram after imputation
+hist(dailySteps$steps,
+main=" ",
+breaks=10,
+xlab="Total Number of Steps Taken Daily After Imputation")
+
+
+
+# Summarize the data by day
+dailyImpActivity <-
+  aggregate(formula = steps~date, data = imputedActivity,
+            FUN = sum, na.rm=TRUE)
+
+
+
+
+```
+
+
+
+
+Calculate and report the mean and median total number of steps taken per day.
+
+```{r}
+# Calculate summary statistics
+meanImpSteps <- round(mean(dailyImpActivity$steps), 2)
+meanImpSteps
+medianImpSteps <- round(median(dailyImpActivity$steps),2)
+medianImpSteps
+
+hist(dailyImpActivity$steps,
+main=" ",
+breaks=10,
+xlab="Total Number of Steps Taken Daily Before Imputation")
+
+
+```
+
+Comments:
+
+* These values don't differ from the estimates from the first part of the assignment.
+* The impact of imputing missing data on the estimates of the total daily number of steps is that The shape of the histogram remains the same as the histogram from removed missing values. However, the frequency counts increased as expected.
+
+
+
+## Differences in activity patterns between weekdays and weekends?
+
+* Use the dataset with the filled-in missing values for this part. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+* Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+
+
+```{r}
+
+
+# Label each date as weekday/weekend (1:5 are weekdays, 6:7 are weekends)
+imputedActivity$weekPart <- factor(
+  ifelse(as.integer(format(imputedActivity$date, format = '%u')) %in% c(1:5),
+         'weekday', 'weekend'))
+
+# Plot the average steps per interval, given the week_part
+stepsInterval %+% imputedActivity + facet_grid(weekPart~.)
+
+
+
+
+
+
+
+# Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
+# 
+
+```
+
+
+
+
+Comment: README file in the GitHub repository show an example of what this plot should look like using simulated data.
+
+
+
+
+
+
+______________
+
+**Note:** the results use sqldf library as alternative to R functions.
+
+____________
+
+
