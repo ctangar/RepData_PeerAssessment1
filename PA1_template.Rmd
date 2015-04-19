@@ -1,14 +1,19 @@
+# General information
+
 ---
 title: "Reproducible Research: Peer Assessment 1"
 author: "Carlos Tangarife"
 date: "Sunday, April 19, 2015"
 ---
 
-----------------------------------
-file             output          
--------------    ----------------
+
+---------------------------------
+file             Output          
+---------------  ----------------
 PA_template.Rmd  html_document   
-----------------------------------
+---------------------------------
+
+# assesment description
 
 This is an R Markdown document. It contains the completed work for peer assignment #1 for the Coursera Reproducable Research class.
 
@@ -32,8 +37,8 @@ First show Code that is needed to:
 Remove all variables from the Global Environment and load data
 
 ```{r}
-# Load the plotting package `ggplot2` by Hadley Wickham.
-# Try to install the package if it is not found.
+# Load the plotting package `ggplot2.
+# Try to install the package if it isn't found.
 if(!suppressMessages(require(ggplot2))){ 
     print('trying to install ggplot2')
     install.packages('ggplot2')
@@ -243,7 +248,6 @@ stepsInterval %+% imputedActivity + facet_grid(weekPart~.)
 # 
 
 ```
-
 
 
 Final report:
