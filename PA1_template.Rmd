@@ -1,10 +1,11 @@
 
 # Identification
 
+|                                                     |
 |:----------------------------------------------------|
-| title: "Reproducible Research: Peer Assessment 1" |
-| author: "Carlos Tangarife"                        |
-| date: "Sunday, April 19, 2015"                    |
+| title: "Reproducible Research: Peer Assessment 1"   |
+| author: "Carlos Tangarife"                          |
+| date: "Sunday, April 19, 2015"                      |
 
 
 # General information  
